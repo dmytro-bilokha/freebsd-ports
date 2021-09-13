@@ -11,9 +11,12 @@ WWW=		https://github.com/trustcrypto/python-onlykey
 
 LICENSE=	MIT
 
+<<<<<<< HEAD
 DEPRECATED=	Depends on expired security/libu2f-host
 EXPIRATION_DATE=2025-09-01
 
+=======
+>>>>>>> 9dacd4d4a86f (Added tomee-plus, py-onlykey, py-onlykey-solo, py-intelhex ports)
 RUN_DEPENDS=	${PYTHON_PKGNAMEPREFIX}hidapi>0:comms/py-hidapi@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}aenum>0:devel/py-aenum@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}six>0:devel/py-six@${PY_FLAVOR} \
