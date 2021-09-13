@@ -1,0 +1,6 @@
+Apache TomEE Plus is the Java EE 8 application server based on Apache
+Tomcat. The "Plus" distribution implements all the Java EE specifications,
+including JAX-WS and JMS.
+
+
+WWW: http://tomee.apache.org/
