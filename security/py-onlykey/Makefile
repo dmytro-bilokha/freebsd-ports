@@ -18,7 +18,7 @@ RUN_DEPENDS=	${PYTHON_PKGNAMEPREFIX}hidapi>0:comms/py-hidapi@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}pynacl>=1.4.0:security/py-pynacl@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}ecdsa>=0.13:security/py-ecdsa@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}cython>=0.23.4:lang/cython@${PY_FLAVOR} \
-		${PYTHON_PKGNAMEPREFIX}libusb1>0:devel/py-libusb1@${PY_FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}onlykey-solo-python>=0.0.31:security/py-onlykey-solo-python@${PY_FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}uhid-freebsd>0:devel/py-uhid-freebsd@${PY_FLAVOR} \
 		u2f-host:security/libu2f-host
 
