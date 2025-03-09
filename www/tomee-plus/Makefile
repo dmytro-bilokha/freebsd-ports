@@ -1,22 +1,21 @@
 PORTNAME=	tomee
-PORTVERSION=	9.1.3
+PORTVERSION=	10.0.0
 CATEGORIES=	www java
 MASTER_SITES=	APACHE/${PORTNAME}/${PORTNAME}-${PORTVERSION}
 PKGNAMESUFFIX=	-plus
 DISTNAME=	apache-${PORTNAME}-${PORTVERSION}${PKGNAMESUFFIX}
 
 MAINTAINER=	dmytro@posteo.net
-COMMENT=	Open-source Java EE application server by Apache based on Tomcat
+COMMENT=	Open-source Jakarta EE application server by Apache based on Tomcat
 WWW=		http://tomee.apache.org/
 
 LICENSE=	APACHE20
 
 RUN_DEPENDS=	jsvc:devel/apache-commons-daemon
 
-USES=		cpe
+USES=		cpe java
 CPE_VENDOR=	apache
-USE_JAVA=	yes
-JAVA_VERSION=	11+
+JAVA_VERSION=	17+
 USE_RC_SUBR=	${PKGBASE:C/-/_/}
 
 NO_ARCH=	yes
