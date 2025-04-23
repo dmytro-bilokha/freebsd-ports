@@ -1,7 +1,6 @@
 PORTNAME=	${GH_PROJECT:tl}
 DISTVERSIONPREFIX=	v
-DISTVERSION=	4.5.0
-PORTREVISION=	1
+DISTVERSION=	4.5.1
 CATEGORIES=	audio
 
 MAINTAINER=	adridg@FreeBSD.org
@@ -38,30 +37,17 @@ CMAKE_OFF=	MUE_BUILD_CRASHPAD_CLIENT \
 		MUE_COMPILE_USE_PCH
 CMAKE_BUILD_TYPE=	release
 
-post-stage:
-	find ${STAGEDIR}${PREFIX}/lib -name '*.a' -delete # static libs from gtest
-	find ${STAGEDIR}${PREFIX}/lib/cmake -name '*.cmake' -delete # cmake configuration for kddockwidget
-	find ${STAGEDIR}${PREFIX}/include -name '*.h' -delete # headers for gtest, dockwidgets
-	find ${STAGEDIR}${PREFIX}/include -name 'README.md' -delete # readmes from gtest
-	find ${STAGEDIR}${PREFIX}/libdata -name '*.pc' -delete # pkgconfig from gtest
-	rmdir \
-		${STAGEDIR}${PREFIX}/include/gmock/internal/custom \
-		${STAGEDIR}${PREFIX}/include/gmock/internal \
-		${STAGEDIR}${PREFIX}/include/gmock \
-		${STAGEDIR}${PREFIX}/include/gtest/internal/custom \
-		${STAGEDIR}${PREFIX}/include/gtest/internal \
-		${STAGEDIR}${PREFIX}/include/gtest \
-		${STAGEDIR}${PREFIX}/include/kddockwidgets/private/indicators \
-		${STAGEDIR}${PREFIX}/include/kddockwidgets/private/multisplitter \
-		${STAGEDIR}${PREFIX}/include/kddockwidgets/private/quick \
-		${STAGEDIR}${PREFIX}/include/kddockwidgets/private \
-		${STAGEDIR}${PREFIX}/include/kddockwidgets \
-		${STAGEDIR}${PREFIX}/include/opus \
-		${STAGEDIR}${PREFIX}/lib/cmake/GTest \
-		${STAGEDIR}${PREFIX}/lib/cmake/KDDockWidgets \
-		${STAGEDIR}${PREFIX}/lib/cmake
-	${INSTALL_DATA} ${FILESDIR}/mscore.desktop ${STAGEDIR}${PREFIX}/share/applications/
-	${INSTALL_DATA} ${WRKSRC}/share/icons/AppIcon/MS4_AppIcon_48x48.png ${STAGEDIR}${PREFIX}/share/icons/hicolor/48x48/apps/mscore.png
-
+post-install:
+	# workaround for https://github.com/musescore/MuseScore/issues/26103
+	@${RM} -r \
+		${STAGEDIR}${PREFIX}/include \
+		${STAGEDIR}${PREFIX}/lib \
+		${STAGEDIR}${PREFIX}/libdata
+	# workaround for https://github.com/musescore/MuseScore/issues/26104
+	@${INSTALL_DATA} ${FILESDIR}/mscore.desktop ${STAGEDIR}${PREFIX}/share/applications/
+	@${REINPLACE_CMD} -e "\
+		s|^Version=.*|Version=${PORTVERSION}|; \
+		s|^Name=.*|Name=MuseScore|; \
+		"  ${STAGEDIR}${PREFIX}/share/applications/mscore.desktop
 
 .include <bsd.port.mk>
