@@ -17,11 +17,8 @@ TEST_DEPENDS=	${PYTHON_PKGNAMEPREFIX}pytest<6.0.0,1:devel/py-pytest@${PY_FLAVOR}
 
 USES=		cpe python
 CPE_VENDOR=	${PORTNAME}_project
-USE_PYTHON=	autoplist distutils
+USE_PYTHON=	autoplist distutils pytest
 
 NO_ARCH=	yes
-
-do-test:
-		cd ${WRKSRC} && ${PYTHON_CMD} -m pytest test
 
 .include <bsd.port.mk>
