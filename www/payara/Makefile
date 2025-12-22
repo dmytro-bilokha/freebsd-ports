@@ -1,5 +1,5 @@
 PORTNAME=	payara
-PORTVERSION=	5.2020.4
+PORTVERSION=	7.2025.2
 CATEGORIES=	www java
 MASTER_SITES=	https://repo1.maven.org/maven2/fish/payara/distributions/${PORTNAME}/${PORTVERSION}/
 MAINTAINER=	dmytro@posteo.net
@@ -11,9 +11,10 @@ LICENSE_COMB=	dual
 
 USES=		java zip
 
+JAVA_VERSION=   21+
 NO_BUILD=	yes
 
-WRKSRC=		${WRKDIR}/payara5
+WRKSRC=		${WRKDIR}/payara7
 DATADIR=	${PREFIX}/${PORTNAME}-${PORTVERSION}
 VARMAIN=	/var/${PORTNAME}
 VARDIR=		/var/${PORTNAME}/${PORTNAME}-${PORTVERSION}
@@ -34,17 +35,18 @@ USE_RC_SUBR=	payara
 USERS=		payara
 GROUPS=		payara
 
-GLASSFISH_BIN_FILES=	appclient asadmin capture-schema jspc package-appclient schemagen startserv stopserv wscompile wsdeploy wsgen wsimport xjc
+GLASSFISH_BIN_FILES=	asadmin
 
 .include <bsd.port.pre.mk>
 
-do-install:
-	@${SED} "s|%%VARDIR%%|${VARDIR}|g" ${PKGDIR}/pkg-message > ${WRKDIR}/pkg-message
-	@${MKDIR} ${STAGEDIR}${VARDIR}/prefs
+pre-install:
 	@${RM} ${WRKSRC}/bin/letsencrypt.py
 	@${FIND} ${WRKSRC} -name '*.bat' -delete
 	@${FIND} ${WRKSRC} -name '*.exe' -delete
 	@${FIND} ${WRKSRC} -name '*.dll' -delete
+do-install:
+	@${SED} "s|%%VARDIR%%|${VARDIR}|g" ${PKGDIR}/pkg-message > ${WRKDIR}/pkg-message
+	@${MKDIR} ${STAGEDIR}${VARDIR}/prefs
 	@(cd ${WRKSRC} && ${COPYTREE_SHARE} \* ${STAGEDIR}${DATADIR})
 	@${FIND} ${STAGEDIR}${DATADIR}/glassfish/domains -path "*/config/*" -type f -exec ${MV} {} {}.sample \;
 	@${MV} ${STAGEDIR}${DATADIR}/glassfish/domains ${STAGEDIR}${VARDIR}/domains
