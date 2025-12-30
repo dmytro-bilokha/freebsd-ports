@@ -35,16 +35,16 @@ USE_RC_SUBR=    ${PORTNAME}
 USERS=          ${PORTNAME}
 GROUPS=         ${PORTNAME}
 
-pre-install:
-	@${RM} ${WRKSRC}/bin/letsencrypt.py
-	@${FIND} ${WRKSRC} -name '*.bat' -o -name '*.exe' -o -name '*.dll' -delete
+EXTRACT_BEFORE_ARGS=    -qo -x '*.bat' -x '*.exe' -x '*.dll' \
+                        -x '*/bin/letsencrypt.py'
+
 do-install:
 	@${MKDIR} ${STAGEDIR}${VARDIR}/prefs
 	@(cd ${WRKSRC} && ${COPYTREE_SHARE} . ${STAGEDIR}${DATADIR})
 	@${FIND} ${STAGEDIR}${DATADIR}/glassfish/domains -path "*/config/*" -type f -exec ${MV} {} {}.sample \;
 	@${MV} ${STAGEDIR}${DATADIR}/glassfish/domains ${STAGEDIR}${VARDIR}/domains
 	@${RLN} ${STAGEDIR}${VARDIR}/domains ${STAGEDIR}${DATADIR}/glassfish/domains
-        @${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/bin/* \
+	@${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/bin/* \
                   ${STAGEDIR}${DATADIR}/mq/bin/* \
                   ${STAGEDIR}${DATADIR}/glassfish/bin/*
 
