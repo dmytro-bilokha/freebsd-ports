@@ -1,7 +1,7 @@
 PORTNAME=	payara
-PORTVERSION=	7.2025.2
+DISTVERSION=	7.2025.2
 CATEGORIES=	www java
-MASTER_SITES=	https://repo1.maven.org/maven2/fish/payara/distributions/${PORTNAME}/${PORTVERSION}/
+MASTER_SITES=	https://repo1.maven.org/maven2/fish/payara/distributions/${PORTNAME}/${DISTVERSION}/
 MAINTAINER=	dmytro@posteo.net
 COMMENT=	Jakarta EE application server derived from GlassFish Server Open Source Edition
 WWW=		https://www.payara.fish/
@@ -14,47 +14,38 @@ USES=		java zip
 JAVA_VERSION=   21+
 NO_BUILD=	yes
 
-WRKSRC=		${WRKDIR}/payara7
-DATADIR=	${PREFIX}/${PORTNAME}-${PORTVERSION}
+SUB_FILES=      pkg-message
+
+WRKSRC=         ${WRKDIR}/${PORTNAME}7
+DATADIR=	${PREFIX}/${PORTNAME}-${DISTVERSION}
 VARMAIN=	/var/${PORTNAME}
-VARDIR=		/var/${PORTNAME}/${PORTNAME}-${PORTVERSION}
-PKGMESSAGE?=	${WRKDIR}/pkg-message
+VARDIR=		/var/${PORTNAME}/${PORTNAME}-${DISTVERSION}
 
 PLIST_SUB+=	VARDIR=${VARDIR}
 PLIST_SUB+=	VARMAIN=${VARMAIN}
 
 # Since we USES=java, we propagate the received JAVA_HOME variable to the
 # template files, since it is used by the rc script.
-SUB_LIST=	PAYARAVERSION=${PORTVERSION} \
-		JAVA_HOME=${JAVA_HOME}
+SUB_LIST=	PAYARAVERSION=${DISTVERSION} \
+		JAVA_HOME=${JAVA_HOME} \
+		VARDIR=${VARDIR}
 
-DOWNLOAD_URL=	https://repo1.maven.org/maven2/fish/payara/distributions/${PORTNAME}/${PORTVERSION}/
+USE_RC_SUBR=    ${PORTNAME}
 
-USE_RC_SUBR=	payara
-
-USERS=		payara
-GROUPS=		payara
-
-GLASSFISH_BIN_FILES=	asadmin
-
-.include <bsd.port.pre.mk>
+USERS=          ${PORTNAME}
+GROUPS=         ${PORTNAME}
 
 pre-install:
 	@${RM} ${WRKSRC}/bin/letsencrypt.py
-	@${FIND} ${WRKSRC} -name '*.bat' -delete
-	@${FIND} ${WRKSRC} -name '*.exe' -delete
-	@${FIND} ${WRKSRC} -name '*.dll' -delete
+	@${FIND} ${WRKSRC} -name '*.bat' -o -name '*.exe' -o -name '*.dll' -delete
 do-install:
-	@${SED} "s|%%VARDIR%%|${VARDIR}|g" ${PKGDIR}/pkg-message > ${WRKDIR}/pkg-message
 	@${MKDIR} ${STAGEDIR}${VARDIR}/prefs
-	@(cd ${WRKSRC} && ${COPYTREE_SHARE} \* ${STAGEDIR}${DATADIR})
+	@(cd ${WRKSRC} && ${COPYTREE_SHARE} . ${STAGEDIR}${DATADIR})
 	@${FIND} ${STAGEDIR}${DATADIR}/glassfish/domains -path "*/config/*" -type f -exec ${MV} {} {}.sample \;
 	@${MV} ${STAGEDIR}${DATADIR}/glassfish/domains ${STAGEDIR}${VARDIR}/domains
 	@${RLN} ${STAGEDIR}${VARDIR}/domains ${STAGEDIR}${DATADIR}/glassfish/domains
-	@${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/bin/*
-	@${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/mq/bin/*
-.for x in ${GLASSFISH_BIN_FILES}
-	@${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/glassfish/bin/${x}
-.endfor
+        @${CHMOD} ${BINMODE} ${STAGEDIR}${DATADIR}/bin/* \
+                  ${STAGEDIR}${DATADIR}/mq/bin/* \
+                  ${STAGEDIR}${DATADIR}/glassfish/bin/*
 
-.include <bsd.port.post.mk>
+.include <bsd.port.mk>
