@@ -12,6 +12,8 @@ LICENSE_COMB=	dual
 USES=		java zip
 
 JAVA_VERSION=   21+
+
+NO_ARCH=        yes
 NO_BUILD=	yes
 
 SUB_FILES=      pkg-message
