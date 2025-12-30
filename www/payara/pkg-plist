@@ -6,7 +6,6 @@
 %%DATADIR%%/glassfish/bin/capture-schema.1m
 %%DATADIR%%/glassfish/bin/jdkcheck
 %%DATADIR%%/glassfish/bin/jspc
-%%DATADIR%%/glassfish/bin/letsencrypt.py
 %%DATADIR%%/glassfish/bin/package-appclient
 %%DATADIR%%/glassfish/bin/schemagen
 %%DATADIR%%/glassfish/bin/startserv
