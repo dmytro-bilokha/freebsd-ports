@@ -110,15 +110,6 @@ extra_commands="reload"
 
 _tomee_java_version=`${_tomee_java_home}/bin/java -version 2>&1 | /usr/bin/awk -F '"' '/version/ {print $2}'`
 
-case "${_tomee_java_version}" in
-	9* | 1[0-9]* )
-		_tomee_endorsed_dirs_option=
-		;;
-	*)
-		_tomee_endorsed_dirs_option="-Djava.endorsed.dirs='${_tomee_catalina_home}/endorsed'"
-		;;
-esac
-
 command="%%LOCALBASE%%/bin/jsvc"
 command_args="-java-home '${_tomee_java_home}' \
 	-server \
@@ -132,7 +123,6 @@ command_args="-java-home '${_tomee_java_home}' \
 	-Djava.util.logging.manager=${_tomee_logging_manager} \
 	-Djava.util.logging.config.file='${_tomee_logging_config}' \
 	${_tomee_java_opts} \
-	${_tomee_endorsed_dirs_option} \
 	-Dcatalina.home='${_tomee_catalina_home}' \
 	-Dcatalina.base='${_tomee_catalina_base}' \
 	-Djava.io.tmpdir='${_tomee_catalina_tmpdir}' \
